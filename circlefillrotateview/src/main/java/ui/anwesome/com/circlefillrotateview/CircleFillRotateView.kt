@@ -3,6 +3,7 @@ package ui.anwesome.com.circlefillrotateview
 /**
  * Created by anweshmishra on 26/02/18.
  */
+import android.app.Activity
 import android.content.*
 import android.graphics.*
 import android.view.*
@@ -112,6 +113,13 @@ class CircleFillRotateView(ctx : Context): View(ctx) {
             circleFill?.startUpdating {
                 animator.start()
             }
+        }
+    }
+    companion object {
+        fun create(activity : Activity):CircleFillRotateView {
+            val view = CircleFillRotateView(activity)
+            activity.setContentView(view)
+            return view
         }
     }
 }
