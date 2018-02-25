@@ -67,4 +67,26 @@ class CircleFillRotateView(ctx : Context): View(ctx) {
             }
         }
     }
+    data class CircleFill(var x : Float, var y : Float, var r : Float) {
+        val state = State()
+        fun draw(canvas : Canvas, paint : Paint) {
+            canvas.save()
+            canvas.translate(x, y)
+            canvas.rotate(180f * state.scales[0])
+            val path = Path()
+            path.addCircle(0f, 0f, r, Path.Direction.CW)
+            paint.color = Color.parseColor("#9E9E9E")
+            canvas.clipPath(path)
+            canvas.drawPath(path, paint)
+            paint.color = Color.parseColor("#283593")
+            canvas.drawRect(RectF(-r,  - r * this.state.scales[1], r, r - r * this.state.scales[1]), paint)
+            canvas.restore()
+        }
+        fun update(stopcb : (Float) -> Unit) {
+            state.update(stopcb)
+        }
+        fun startUpdating(startcb : () -> Unit) {
+            state.startUpdating(startcb)
+        }
+    }
 }
