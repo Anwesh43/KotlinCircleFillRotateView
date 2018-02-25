@@ -21,25 +21,25 @@ class CircleFillRotateView(ctx : Context): View(ctx) {
         }
         return true
     }
-    data class State(var dir : Float = 0f, var jDir : Int = 1, var j : Int = 0, var prevScale : Float = 0f) {
-        val scales : Array<Float> = arrayOf(0f, 0f)
+    data class State(var dir : Float = 0f, var j : Int = 0, var prevScale : Float = 0f) {
+        var scales : Array<Float> = arrayOf(0f, 0f)
         fun update(stopcb : (Float) -> Unit) {
             scales[j] += 0.1f * dir
             if(Math.abs(scales[j] - prevScale) > 1) {
                 scales[j] = prevScale + dir
-                j += jDir
-                if(j == scales.size || j == -1) {
-                    jDir *= -1
-                    j += jDir
-                    prevScale = scales[j] + dir
+                j ++
+                if(j == scales.size) {
                     dir = 0f
+                    this.j = 0
                     stopcb(prevScale)
+
                 }
             }
         }
         fun startUpdating(startcb : () -> Unit) {
             if(dir == 0f) {
-                dir = 1 - 2 * prevScale
+                dir = 1f
+                scales = arrayOf(0f, 0f)
                 startcb()
             }
         }
