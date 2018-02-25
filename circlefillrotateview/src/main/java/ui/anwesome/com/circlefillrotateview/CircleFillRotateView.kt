@@ -89,4 +89,28 @@ class CircleFillRotateView(ctx : Context): View(ctx) {
             state.startUpdating(startcb)
         }
     }
+    data class Renderer(var view : CircleFillRotateView, var time : Int = 0) {
+        var circleFill : CircleFill ?= null
+        val animator = Animator(view)
+        fun render(canvas : Canvas, paint : Paint) {
+            if(time == 0) {
+                val w = canvas.width.toFloat()
+                val h = canvas.height.toFloat()
+                circleFill = CircleFill(w/2, h/2, Math.min(w,h)/5)
+            }
+            canvas.drawColor(Color.parseColor("#212121"))
+            circleFill?.draw(canvas, paint)
+            time++
+            animator?.animate {
+                circleFill?.update {
+                    animator.stop()
+                }
+            }
+        }
+        fun handleTap() {
+            circleFill?.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
